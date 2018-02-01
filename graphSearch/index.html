@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta http-equiv="X-UA-Compatible" content="ie=edge">
+  <title>Graph Seach</title>
+  <script src="../library/$JS.js"></script>
+  <script src="../library/$JS.DOM.js"></script>
+  <script src="../library/$JS.GraphSearch.js"></script>
+</head>
+<body>
+  <canvas id="thisCan"></canvas>
+
+  <script>
+    var $ = $js.DOM, 
+        canEl = $('#thisCan'),
+        can = canEl.getDom();
+
+    var row = 5, col = 5, map = new Array();
+    for(var i=0; i<row; i++){
+      map[i] = new Array();
+      for(var j=0; j<col; j++){
+        map[i][j] = Math.random() < 0.3 ? 1 : 0;
+      }
+    }
+
+    var gs = new $js.GSearch(map);
+
+    console.log(gs.map);
+  </script>
+</body>
+</html>

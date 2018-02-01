@@ -1,3 +1,4 @@
+(function(){
 //DOM Library V0.0.1
 var fn = {}, DOM;
 
@@ -472,3 +473,4 @@ DOM = $js('DOM', function(a){
     return c;
   }
 });
+}());

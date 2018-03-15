@@ -11,14 +11,13 @@
 <body>
   
     <script>
-        var $ = $js;
 
         //DOM Library V0.0.1
-        var el0 = $.DOM('<div></div>');
+        var el0 = DOM('<div class="div"></div>');
         el0.attr('id', 'isId');
         el0.append('<p>Ismael</p>');
 
-        $.DOM(document.body).append(el0);
+        DOM(document.body).append(el0);
         console.log(el0.getDom());
       </script>
 </body>

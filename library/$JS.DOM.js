@@ -1,8 +1,8 @@
 (function(){
 //DOM Library V0.0.1
-var fn = {}, DOM;
+var fn = {};
 
-$js.root('hasClass', function(a, b){
+$js.libraryAdd('hasClass', function(a, b){
   var c = (a.getAttribute('class') || '').split(/\s+/g); 
   for(var d in c){
     if(c[d] == b){
@@ -10,18 +10,18 @@ $js.root('hasClass', function(a, b){
     }
   } 
   return false;
-});
+}, 'static');
 
-$js.root('addClass', function(a, b){
+$js.libraryAdd('addClass', function(a, b){
   if(this.hasClass(a, b) == false){
     var c = (a.getAttribute('class') || '').split(/\s+/g); 
     c.push(b); 
     a.setAttribute('class', c.join(' '));
   } 
   return false;
-});
+}, 'static');
 
-$js.root('removeClass', function(a, b){
+$js.libraryAdd('removeClass', function(a, b){
   if(this.hasClass(a, b) == true){
     var c = (a.getAttribute('class') || '').split(/\s+/g), 
     d = new Array(); 
@@ -33,10 +33,11 @@ $js.root('removeClass', function(a, b){
     a.setAttribute('class', d.join(' '));
   } 
   return false;
-});
+}, 'static');
 
-$js.root('matches', function(a, b){
+$js.libraryAdd('matches', function(a, b){
   if(a.nodeType != 1){
+    console.log('ok', a.nodeType);
     return false;
   }else if(!b){
     return true;
@@ -47,7 +48,7 @@ $js.root('matches', function(a, b){
     if(e.substring(0, 1) == '#'){
       throw 'not supported:' + e;
     }else if(e.substring(0, 1) == '.'){
-      if($js.root().hasClass(a, e.substring(1))){
+      if(this.hasClass(a, e.substring(1))){
         return true;
       }
     }else{
@@ -57,9 +58,9 @@ $js.root('matches', function(a, b){
     }
   } 
   return false;
-});
+}, 'static');
 
-$js.root('html', function(a){
+$js.libraryAdd('html', function(a){
   var b = this.parser.parseFromString('<div xmlns="http://www.w3.org/1999/xhtml">'+a+'</div>','text/xml').firstChild, 
       c = []; 
   while(b.firstChild){
@@ -68,14 +69,14 @@ $js.root('html', function(a){
   }
   c.__proto__ = fn; 
   return c;
-});
+}, 'static');
 
-$js.root('pxToNum', function(a){
+$js.libraryAdd('pxToNum', function(a){
   if(!a || typeof a != 'string' || a.length <= 2 || a.charAt(a.length - 2) != 'p' || a.charAt(a.length - 1) != 'x'){
     return 0;
   } 
   return +a.substring(0, a.length - 2);
-});
+}, 'static');
 
 fn.attr = function(a){
   if(arguments.length == 1){
@@ -167,7 +168,7 @@ fn.offset = function(){
 
 fn.append = function(a){
   if(typeof a == 'string'){
-    a = $js.root().html(a);
+    a = $js.html(a);
   } 
   for(var b = 0; b < a.length; b += 1){
     this.appendChild(a[b]);
@@ -177,7 +178,7 @@ fn.append = function(a){
 
 fn.prepend = function(a){
   if(typeof a == 'string'){
-    a = $js.root().html(a);
+    a = $js.html(a);
   } 
   for(var b = 0; b < a.length; b += 1){
     if(this.firstChild){
@@ -220,23 +221,23 @@ fn.detach = function(){
 }
 
 fn.parent = function(){
-  return $js.DOM(this.parentNode);
+  return DOM(this.parentNode);
 }
 
 fn.closest = function(a){
   for(var b = this; b != null; b = b.parentNode){
-    if($js.root().matches(b, a)){
-      return $js.DOM(b);
+    if($js.matches(b, a)){
+      return $DOM(b);
     }
   } 
-  return $js.DOM();
+  return DOM();
 }
 
 fn.children = function(a){
   var b = [], 
       c = this.childNodes; 
   for(var d = 0; d < c.length; d += 1){
-    if($js.root().matches(c.item(d), a)){
+    if($js.matches(c.item(d), a)){
       b.push(c.item(d));
     }
   } 
@@ -245,7 +246,7 @@ fn.children = function(a){
 }
 
 fn.index = function(a){
-  return Array.prototype.indexOf.call($js.DOM(this).parent().children(a), this);
+  return Array.prototype.indexOf.call(DOM(this).parent().children(a), this);
 }
 
 fn.find = function(a){
@@ -258,7 +259,7 @@ fn.find = function(a){
   return b;
 }
 
-fn.clone = function(){return $js.DOM(this.cloneNode(true));}
+fn.clone = function(){return DOM(this.cloneNode(true));}
 
 fn.focus = function(){this.focus(); return this;}
 
@@ -310,14 +311,14 @@ fn.outerWidth = function(a){
   var b = this.offsetWidth; 
   if(a){
     var c = window.getComputedStyle(this, null); 
-    return b + $js.root().pxToNum(c.marginLeft) + $js.root().pxToNum(c.marginRight);
+    return b + $js.pxToNum(c.marginLeft) + $js.pxToNum(c.marginRight);
   } 
   return b;
 }
 
 fn.innerWidth = function(){
   var a = window.getComputedStyle(this, null); 
-  return this.offsetWidth - $js.root().pxToNum(a.borderLeftWidth) - $js.root().pxToNum(a.borderRightWidth);
+  return this.offsetWidth - $js.pxToNum(a.borderLeftWidth) - $js.pxToNum(a.borderRightWidth);
 }
 
 fn.width = function(){
@@ -325,21 +326,21 @@ fn.width = function(){
     return this.innerWidth;
   } 
   var a = window.getComputedStyle(this, null); 
-  return this.offsetWidth - $js.root().pxToNum(a.borderLeftWidth) - $js.root().pxToNum(a.borderRightWidth) - $js.root().pxToNum(a.paddingLeft) - $js.root().pxToNum(a.paddingRight);
+  return this.offsetWidth - $js.pxToNum(a.borderLeftWidth) - $js.pxToNum(a.borderRightWidth) - $js.pxToNum(a.paddingLeft) - $js.pxToNum(a.paddingRight);
 }
 
 fn.outerHeight = function(a){
   var b = this.offsetHeight; 
   if(a){
     var c = window.getComputedStyle(this, null); 
-    return b + $js.root().pxToNum(c.marginTop) + $js.root().pxToNum(c.marginBottom);
+    return b + $js.pxToNum(c.marginTop) + $js.pxToNum(c.marginBottom);
   } 
   return b;
 }
 
 fn.innerHeight = function(){
   var a = window.getComputedStyle(this, null); 
-  return this.offsetHeight - $js.root().pxToNum(a.borderTopWidth) - $js.root().pxToNum(a.borderBottomWidth);
+  return this.offsetHeight - $js.pxToNum(a.borderTopWidth) - $js.pxToNum(a.borderBottomWidth);
 }
 
 fn.height = function(){
@@ -347,7 +348,7 @@ fn.height = function(){
     return this.innerHeight;
   } 
   var a = window.getComputedStyle(this, null); 
-  return this.offsetHeight - $js.root().pxToNum(a.borderTopWidth) - $js.root().pxToNum(a.borderBottomWidth) - $js.root().pxToNum(a.paddingTop) - $js.root().pxToNum(a.paddingBottom);
+  return this.offsetHeight - $js.pxToNum(a.borderTopWidth) - $js.pxToNum(a.borderBottomWidth) - $js().pxToNum(a.paddingTop) - $js.pxToNum(a.paddingBottom);
 }
 
 fn.getSize = function(){
@@ -357,17 +358,17 @@ fn.getSize = function(){
 }
 
 fn.addClass = function(a){
-  $js.root().addClass(this, a); 
+  $js.addClass(this, a); 
   return this;
 }
 
 fn.removeClass = function(a){
-  $js.root().removeClass(this, a); 
+  $js.removeClass(this, a); 
   return this;
 }
 
 fn.hasClass = function(a){
-  return $js.root().hasClass(this, a);
+  return $js.hasClass(this, a);
 }
 
 fn.getPath = function(){
@@ -381,9 +382,10 @@ fn.getPath = function(){
     }
     return a;
 }
+
 fn.getAllPath = function(){
     var a = [], b = this.parentNode;
-    a.push($js.DOM(this).getPath());
+    a.push(DOM(this).getPath());
     while(b){
         if(!b.tagName || b.tagName == 'BODY' || b.tagName == 'HTML'){break;}
         var c = String(b.tagName).toLocaleLowerCase();
@@ -437,18 +439,18 @@ fn = $js.extend(fn, {
   },
 
   first : function(){
-    return $js.DOM(this.length > 0? this[0] : null);
+    return DOM(this.length > 0? this[0] : null);
   },
 
   last : function(){
-    return $js.DOM(this.length > 0? this[this.length - 1] : null);
+    return DOM(this.length > 0? this[this.length - 1] : null);
   }
 });
 
-DOM = $js('DOM', function(a){
+$js.libraryAdd('DOM', function(a){
   if(typeof a == 'string'){
     if(a.charAt(0) == '<'){
-      return DOM.root.html(a);
+      return $js.html(a);
     }else{
       var b = document.querySelectorAll(a), 
           c = []; 

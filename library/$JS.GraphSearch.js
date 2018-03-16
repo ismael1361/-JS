@@ -6,7 +6,7 @@ fn.Node = function(a){
   return this;
 }
 
-GS_ = $js('GSearch', function(a){
+$js.libraryAdd('GSearch', function(a){
   if(Array.isArray(a) && a.length > 0){
     for(var i=0; i<a.length; i++){
       if(Array.isArray(a[i]) && a[i].length > 0){

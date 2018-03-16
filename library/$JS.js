@@ -1,11 +1,30 @@
 window.$js = (function(){
   var init = {};
+
   init.libraryAdd = function(name, calback, type){
+    var fun, method;
     if(type === 'static'){
-      init[name] = calback;
+      fun = init[name] = calback;
     }else{
-      window[name] = calback;
+      fun = window[name] = calback;
     }
+
+    method = function(fun){
+      fun.extend = function(a, b){
+        if(a instanceof Object){
+          for(var c in a){
+            this.extend(c, a[c]);
+          }
+          return this;
+        }else if(typeof a == 'string' && typeof b == 'function'){
+          var c = fun.prototype[a] = b;
+          return method(c);
+        }
+      }
+      return fun;
+    }
+
+    return method(fun);
   }
 
   init.libraryAdd('extend', function(a, b){

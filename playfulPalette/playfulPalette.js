@@ -1,3 +1,4 @@
+(function(){
 function bubble(x, y, color, r){
   this.x = x;
   this.y = y;
@@ -57,3 +58,32 @@ function getFragColor(x, y, blend){
     return color;
   }
 }
+
+var pp = window.Palette = function(){
+  this.paints = new blend();
+}
+
+pp.prototype.addPaint = function(c){
+  var a = this.paints.add(c);
+  return a;
+}
+
+pp.prototype.getPick = function(x, y){
+  return getFragColor(x, y, this.paints);
+}
+
+pp.prototype.render = function(w, h){
+  var p = this.paints, d = [], x = 0, y = 0;
+  for(var i=0; i<(w*h); i++){
+    x = (i) % w;
+    y = x == w ? y+1 : y;
+    var color = getFragColor(x, y, p);
+    d.push(color[0]);
+    d.push(color[1]);
+    d.push(color[2]);
+    d.push(255);
+  }
+  return {data: d, height: h, width: w};
+}
+
+}());

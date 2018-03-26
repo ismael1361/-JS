@@ -73,17 +73,14 @@ pp.prototype.getPick = function(x, y){
 }
 
 pp.prototype.render = function(w, h){
-  var p = this.paints, d = [], x = 0, y = 0;
-  for(var i=0; i<(w*h); i++){
-    x = (i) % w;
-    y = x == w ? y+1 : y;
-    var color = getFragColor(x, y, p);
-    d.push(color[0]);
-    d.push(color[1]);
-    d.push(color[2]);
-    d.push(255);
+  var p = this.paints, x = 0, y = 0, img = document.createElement('canvas').getContext('2d').createImageData(w, h), d = img.data;
+  for(var i=0; i < d.length; i+=4){
+    var x = (i/4) % w;
+    y = x == 0 ? y+1 : y;
+    var c = getFragColor(x, y, p);
+    d[i] = c[0]; d[i+1] = c[1]; d[i+2] = c[2]; d[i+3] = 255;
   }
-  return {data: d, height: h, width: w};
+  return img;
 }
 
 }());

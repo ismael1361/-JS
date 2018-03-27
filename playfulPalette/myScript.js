@@ -30,9 +30,27 @@
 
   update();
 
-  var myBoll = pp.addPaint().move(0, 0).ray(100);
+  var isMove = false, objSelect = null;
+
   can_.on('mousemove', function(a){
-    myBoll.move(a.offsetX, a.offsetY);
-    update();
+    if(isMove == true && objSelect.move){
+      objSelect.move(a.offsetX, a.offsetY);
+      update();
+    }
+  });
+
+  can_.on('mousedown', function(a){
+    objSelect = pp.selectPaint(a.offsetX, a.offsetY);
+    isMove = true;
+  });
+
+  can_.on('mouseup', function(a){
+    objSelect = null;
+    isMove = false;
+  });
+
+  can_.on('mouseout', function(a){
+    objSelect = null;
+    isMove = false;
   });
 }());

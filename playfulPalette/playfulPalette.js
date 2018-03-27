@@ -83,4 +83,24 @@ pp.prototype.render = function(w, h){
   return img;
 }
 
+pp.prototype.selectPaint = function(x, y){
+  var p = this.paints.paints,
+      dist = function(a, b, r){
+        var r = typeof r == "number" ? r : 50,
+            diff = function(a, b){if (a > b){return (a - b);}else{return (b - a);}},
+            dx = diff(a.x, b.x),
+            dy = diff(a.y, b.y);
+        return (dx * dx + dy * dy) / r / r;
+      };
+  p.sort(function(a, b){
+    var pt = {x: x, y: y};
+    return dist(pt, a, a.r)-dist(pt, b, b.r);
+  });
+
+  if(dist({x: x, y: y}, p[0], p[0].r) <= 0.25){
+    return p[0];
+  }
+  return false;
+}
+
 }());

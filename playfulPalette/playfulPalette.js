@@ -41,22 +41,22 @@ function getFragColor(x, y, blend){
         d2 = (dx * dx + dy * dy) / r / r;
     if(d2 <= b2){
       var d4 = d2 * d2, d5 = 1-(4*d4*d2 / b4-17*d4 / b3+22*d2 / b2)/9;
-      c[0] = (c[0]) + (bub.color[0]/255) * d5;
-      c[1] = (c[1]) + (bub.color[1]/255) * d5;
-      c[2] = (c[2]) + (bub.color[2]/255) * d5;
+      c[0] = (c[0] + bub.color[0] * d5);
+      c[1] = (c[1] + bub.color[1] * d5);
+      c[2] = (c[2] + bub.color[2] * d5);
       f += d5;
     }
   }
 
-  var max = 0.4, border = 0.02;
+  var max = 0.4, border = 0.03;
 
   if(f < max){
     return [255, 255, 255];
   }else{
     p = f < (max+border) ? Math.min(Math.max(((f-max)/(border)), 0), 1) : 1;
-    c[0] = Math.round((1 - p) * 255 + p * ((c[0] / f)*255));
-    c[1] = Math.round((1 - p) * 255 + p * ((c[1] / f)*255));
-    c[2] = Math.round((1 - p) * 255 + p * ((c[2] / f)*255));
+    c[0] = Math.round((1 - p) * 255 + p * (c[0] / f));
+    c[1] = Math.round((1 - p) * 255 + p * (c[1] / f));
+    c[2] = Math.round((1 - p) * 255 + p * (c[2] / f));
     return c;
   }
 }

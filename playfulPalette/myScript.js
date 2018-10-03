@@ -10,10 +10,17 @@
       height = can.height = 400,
       pp = new Palette();
 
+  var rgb = function(r, g, b){return [r, g, b];}
+
   pp.addPaint([244,67,54]).move(100, 100).ray(200);
   pp.addPaint([33,150,243]).move(200, 100).ray(200);
   pp.addPaint([0,150,136]).move(220, 220).ray(200);
-  pp.addPaint([255,193,7]).move(110, 180).ray(200);
+  pp.addPaint([255,193,7]).move(110, 180).ray(150);
+
+  pp.addPaint(rgb(233,30,99)).move(250, 50).ray(150);
+  pp.addPaint(rgb(139,195,74)).move(300, 200).ray(200);
+  pp.addPaint(rgb(96,125,139)).move(270, 110).ray(200);
+  pp.addPaint(rgb(255,87,34)).move(140, 220).ray(200);
 
   function update(){
     /*var imageData = ctx.getImageData(0, 0, width, height), d = imageData.data, y = -1;

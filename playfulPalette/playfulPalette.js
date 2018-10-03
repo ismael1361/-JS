@@ -14,6 +14,9 @@ bubble.prototype.ray = function(r) {
   this.r = r;
   return this;
 };
+bubble.prototype.containThisPosition = function(x, y){
+  return this.x - this.r < x && this.x + this.r > x && this.y - this.y < y && this.y + this.r > y;
+}
 
 function blend(){
   this.paints = [];
@@ -32,6 +35,7 @@ function getFragColor(x, y, blend){
   var b2 = 0.25, b3 = b2 * b2, b4 = b3 * b2, f = 0, p = 1, c = [0, 0, 0];
 
   for(var i=0; i<blend.length; i++){
+    if(!blend[i].containThisPosition(x, y)){continue;}
     var bub = blend[i], r = bub.r,
         dx = (bub.x-x), dy = (bub.y-y),
         d2 = (dx * dx + dy * dy) / r / r;
@@ -44,10 +48,12 @@ function getFragColor(x, y, blend){
     }
   }
 
-  if(f < 0.4){
+  var max = 0.4, border = 0.02;
+
+  if(f < max){
     return [255, 255, 255];
   }else{
-    p = f < 0.43 ? Math.min(Math.max(((f-0.4)/0.03), 0), 1) : 1;
+    p = f < (max+border) ? Math.min(Math.max(((f-max)/(border)), 0), 1) : 1;
     c[0] = Math.round((1 - p) * 255 + p * ((c[0] / f)*255));
     c[1] = Math.round((1 - p) * 255 + p * ((c[1] / f)*255));
     c[2] = Math.round((1 - p) * 255 + p * ((c[2] / f)*255));
